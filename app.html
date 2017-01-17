@@ -9,8 +9,13 @@
 
     <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="css/app.css">
+    <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
 </head>
 <body>
+
     <div class="container">
         <!-- Static navbar -->
         <nav class="navbar navbar-default">
@@ -98,11 +103,183 @@
                     </div>
                 </div>
             </div>        
-        </div>       
+        </div>
+                <!-- Allocation -->
+        <div id="allocation" class="tab-pane fade">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Allocations</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-10 col-md-offset-1">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th width="120" class="text-center">Budgeted For</th>
+                                    <th width="120" class="text-center">Actual Spent</th>
+                                    <th width="40"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="allocation">
+                                <tr>
+                                    <td>1</td>
+                                    <td>Gas</td>
+                                    <td class="text-center">100</td>
+                                    <td class="text-center">50</td>
+                                    <!-- <td><a class="btn btn-sm"><span class="glyphicon glyphicon-remove" id="allRem" aria-hidden="true"></span></a></td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <hr>
+                        <h4>You can add more items below</h4>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="allName" placeholder="Add item">
+                                    <span class="input-group-btn">
+                                        
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="allNum" placeholder="Amount">
+                                    <div class="input-group">
+                                    <select name="category" class="form-control select">
+                                        <option value="high">high</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="low">Low</option>
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" id="allSub"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- /.row -->
+                    </div>  
+                </div>
+            </div>   
+        </div>
+<!-- Income -->
+        <div id="income" class="tab-pane fade">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Income</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-10 col-md-offset-1">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th width="40">#</th>
+                                    <th>Item</th>
+                                    <th width="120" class="text-center">Amount</th>
+                                    <th width="40"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="incom">
+                                
+                            </tbody>
+                        </table>
+
+                        <hr>
+                        <h4>You can add more items below</h4>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="incName" placeholder="Name">
+                                    <span class="input-group-btn">
+                                        
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="incNum" placeholder="Amount">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" id="incSub"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- /.row -->
+                    </div>  
+                </div>
+            </div>   
+        </div>
+
+        <!-- Expenses -->
+        <div id="expenses" class="tab-pane fade">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Expenses</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-10 col-md-offset-1">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th width="40">#</th>
+                                    <th>Item</th>
+                                    <th width="120" class="text-center">Amount</th>
+                                    <th width="40"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="expensesT">
+                                
+                            </tbody>
+                        </table>
+
+                        <hr>
+                        <h4>You can add more items below</h4>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="expName" placeholder="Name">
+                                    <span class="input-group-btn">                                        
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="expNum" placeholder="Amount">
+                                    <span class="input-group-btn">                                        
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" id="expSub"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- /.row -->
+                    </div>  
+                </div>
+            </div>   
+        </div>
+    </div>
+
+    
+</div>
+
+<!-- footer -->
+<footer id="footer">
+  <div class="text-center padder clearfix">
+    <p>
+        <span class="brand-name brand-name-footer"> &copy; 2017 Budget App<small>&reg</small>  | Developed by Usman Ibrahim | App v1.0</span><br><br>
+    </p>
+  </div>
+</footer>
+<!-- / footer -->
+        
 
 
     <!-- JavaScripts -->
     <script src="js/jquery-3.1.1.js"></script>
     <script src="bootstrap/js/bootstrap.js"></script>
+    <script src="js/fireinit.js"></script>
+    <script scr="js/app.js"></script>
 </body>
 </html>
