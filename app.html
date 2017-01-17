@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Budget App</title>
+
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Static navbar -->
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">Budget App</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav nav-tabs">
+                <li class="active dashboard"><a data-toggle="tab" href="#dashboard">Dashboard</a></li>
+                <li class="budget"><a data-toggle="tab" href="#allocation">Budget Allocations</a></li>
+                <li class="income"><a data-toggle="tab" href="#income">Projected Income</a></li>
+                <li class= "expenses"><a data-toggle="tab" href="#expenses">Expenses</a></li>
+              </ul>
+          </li>
+      </ul>
+    
+    </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+    </nav>
+
+    <div class="tab-content">
+        <!-- Dashboard -->
+        <div id="dashboard" class="tab-pane fade in active">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Income and Accounts Balance </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    Expected Income:
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    1000.00
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Total:</h4>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <h4>600.00</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Total Expenses</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6 right">
+                                    Total Expenses:
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    100.00
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-md-6 right">
+                                    <h4>Balance left:</h4>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <h4>100.00</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+        </div>       
+
+
+    <!-- JavaScripts -->
+    <script src="js/jquery-3.1.1.js"></script>
+    <script src="bootstrap/js/bootstrap.js"></script>
+</body>
+</html>
