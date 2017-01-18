@@ -1,0 +1,25 @@
+{
+  "name": "budget-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^4.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-js": "browserify js/fireinit.js > js/findem.js",
+    "watch-js": "watchify js/fireinit.js -o js/findem.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/freemile/budget-analysis-app.git"
+  },
+  "author": "usman ibrahim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/freemile/budget-analysis-app/issues"
+  },
+  "homepage": "https://github.com/freemile/budget-analysis-app#readme"
+}

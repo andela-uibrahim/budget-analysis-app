@@ -116,15 +116,23 @@
                             <thead>
                                 <tr>
                                     <th>Item</th>
+                                    <th width="120" class="text-center">Option</th>
                                     <th width="120" class="text-center">Budgeted For</th>
-                                    <th width="120" class="text-center">Actual Spent</th>
+                                    <th width="120" class="text-center">Actual</th>
+                                    <th width="120" class="text-center">Spent</th>
                                     <th width="40"></th>
                                 </tr>
                             </thead>
                             <tbody class="allocation">
                                 <tr>
                                     <td>1</td>
-                                    <td>Gas</td>
+                                    <td>
+                                        <select name="category" class="form-control">
+                                            <option value="High">High</option>
+                                            <option value="Medium">Medium</option>
+                                            <option value="Low">Low</option>
+                                        </select></td>
+                                    <td class="text-center">Gas</td>
                                     <td class="text-center">100</td>
                                     <td class="text-center">50</td>
                                     <!-- <td><a class="btn btn-sm"><span class="glyphicon glyphicon-remove" id="allRem" aria-hidden="true"></span></a></td> -->
@@ -146,12 +154,6 @@
                             <div class="col-lg-3">
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="allNum" placeholder="Amount">
-                                    <div class="input-group">
-                                    <select name="category" class="form-control select">
-                                        <option value="high">high</option>
-                                        <option value="medium">Medium</option>
-                                        <option value="low">Low</option>
-                                    </select>
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button" id="allSub"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                     </span>
@@ -249,6 +251,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-3">
+                                <div class="input-group">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button" id="expSub"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                     </span>
@@ -279,7 +282,7 @@
     <!-- JavaScripts -->
     <script src="js/jquery-3.1.1.js"></script>
     <script src="bootstrap/js/bootstrap.js"></script>
-    <script src="js/fireinit.js"></script>
+    <script src="js/findem.js"></script>
     <script scr="js/app.js"></script>
 </body>
 </html>
