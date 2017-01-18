@@ -1,13 +1,13 @@
-require('dotenv').config();
+//require('dotenv').config();
 (function(){
   // Initialize Firebase
  
   firebase.initializeApp({
-  	apiKey: process.env.API_SECRET,
-    authDomain: process.env.auth_secret,
+  	apiKey: "AIzaSyAukPL31o3g68FK_VIA2atir6VUl3PbgIE",
+    authDomain: "budget-analysis-68a70.firebaseapp.com",
     databaseURL: "https://budget-analysis-68a70.firebaseio.com",
-    storageBucket: process.env.storage_Bucket,
-    messagingSenderId: process.env.messaging_SenderId
+    storageBucket: "budget-analysis-68a70.appspot.com",
+    messagingSenderId: "825698201032"
   });
 })();
 
@@ -36,117 +36,171 @@ dashboard("usman",500);
 // };
 
 
-var myDashboard = firebase.database().ref('table/dashboard/');
+var myDashRef = firebase.database().ref('table/dashboard/');
 var myIncome =firebase.database().ref('table/income/');
-var myExpenses= firebase.database().ref('table/expenses/');
-var myBudget =firebase.database().ref('table/budget/');
+var myExpenseRef= firebase.database().ref('table/expenses/');
+var myBudgetRef =firebase.database().ref('table/budget/');
 
 
 
 $(document).ready(function(){
 
-	firebase.database().ref('/table/dashboard').once('value').then(function(childSnapshot) {
-	  var name = childSnapshot.val();
-	  console.log(name);
-	  // console.log(tableT.dashboard)
-	 // for (var n in tableT.dashboard){
-	  //	console.log(n)
-    	// alert(JSON.stringify(n["totIncomes"]));
-  	}
- });
+	var totalInc=0;
+	var totalExp=0;
+	myDashRef.orderByKey().on("value", function(snap){
+        snap.forEach(function(childSnap){
+            
+          var  arrVal = childSnap.val();
+            totalInc+= arrVal.totIncomes;
+            totalExp+=arrVal.totalExpenses;
+        });
+      
+      	$("#expectedIncome").append("<div class='row'>"+
+	                                  	"<div class='col-md-6'>"+
+	                                    	"Expected Income:"+
+	                                  	"</div>"+
+	                                	"<div class='col-md-6 text-right'>"+
+	                                    	totalInc+
+	                                	"</div>"+
+                          				"</div>");
+      	
+      	$("#totalExp").append("<div class='col-md-6 right'>"+
+                                    "Total Expenses:"+
+                                "</div>"+
+                                "<div class='col-md-6 text-right'>"+
+                                    totalExp+
+                                "</div>");
 
-	$('.allocation').click(function(){
-		$('#allSub').click(function(){
-			var name = $('#allName').val();
-			var amount= $('#allNum').val();
-			var newPostRef= firebase.database().ref('table/budget/').push();
-				newPostRef.set({
-				    allocation: amount,
-				    name: name
+      	$("#balance").append("<div class='col-md-6 text-right'>"+
+                                    "<h4>"+
+                                    	balance(totalInc,totalExp)+
+                                    "</h4>"+
+                                "</div>");
+
+      });
+			
+
+
+
+
+	// myDashRef.once('value').then(function(snapshot) {
+	
+			$('.budget').click(function(){
+				
+
+				$('#allSub').click(function(){
+					var purpose = $('#allName').val();
+					var amount= $('#allNum').val();
+					var selected= $('#mySelect').val();
+					var newPostRef= myBudgetRef.push();
+						newPostRef.set({
+						    allocation: amount,
+						    purpose: purpose,
+						    priority:selected
+						});
+
+					var allocation=0;
+					var purpose =0;
+					var priority=0;
+					var index=0;
+		// looop through the data base and display the content inside it
+					myBudgetRef.orderByKey().on("value", function(snap){
+        		snap.forEach(function(childSnap){
+            var  budget = childSnap.val();
+            index++;
+            allocation = budget.allocation;
+            purpose =budget.purpose;
+            priority = budget.priority;
+            var spent=0;
+            myExpenseRef.orderByKey().on("value", function(snap){
+        		snap.forEach(function(childSnap){
+        					var expenses= childSnap.val();
+        					var spentOn = expenses.spentOn;
+        					if (spentOn===purpose){
+        							spent = expenses.amount;
+        							return false;
+        					}
+	        		});
+	        	});
+
+            $('.allocation').append("<tr>"+
+												"<td>"+index+"</td>"+
+												"<td class='text-center'>"+priority+"</td>"+	
+												"<td class='text-center'>"+purpose+"</td>"+
+												"<td class='text-center'>"+allocation+"</td>"+
+												"<td class='text-center'>"+spent+"</td>"+
+												"</tr>");
+        	});
+						
+					});
+				    
 				});
 
-
-//extract your whole DB
-// firebase.database().ref('/table/').once('value').then(function(snapshot) {
-//   var tableT = snapshot.val();
-//   alert(tableT.dashboard);
-// });
-
-// looop through the data base and display the content inside it
-			for(i=0; i<3; i++){
-				$('.allocation').append("<tr>"+
-										"<td>1</td>"+	
-										"<td>Gas</td>"+
-										"<td class='text-center'>100</td>"+
-										"<td class='text-center'>50</td>"+
-										"</tr>");
-			};
-		    
-		});
-
-	
- });
+			
+		 });
 
 
-	$('.income').click(function(){
-		$('#incSub').click(function(){
-				var name = $('#incName').val();
-				var amount= $('#incNum').val();
-				var newPostRef= firebase.database().ref('table/income/').push();
-					newPostRef.set({
-					    source: name,
-					    amont: amount
+			$('.income').click(function(){
+				$('#incSub').click(function(){
+						var name = $('#incName').val();
+						var amount= $('#incNum').val();
+						var newPostRef= firebase.database().ref('table/income/').push();
+							newPostRef.set({
+							    source: name,
+							    amont: amount
+							});
+
+
+		//extract your whole DB
+		// firebase.database().ref('/table/').once('value').then(function(snapshot) {
+		//   var tableT = snapshot.val();
+		//   alert(tableT.dashboard);
+		// });
+		// looop through the data base and display the content inside it
+						for(i=0; i<3; i++){
+							$('.incom').append("<tr>"+
+		                                    "<td>1</td>"+
+		                                    "<td>Bank</td>"+
+		                                    "<td class='text-center'>500</td>"+
+		                                "</tr>");
+						};
+					    
 					});
+			 });
 
+		$('.expenses').click(function(){
+			$('#expSub').click(function(){
+						var spentOn = $('#expName').val();
+						var amount= $('#expNum').val();
+						var newPostRef= myExpenseRef.push();
+							newPostRef.set({
+							    spentOn: spentOn,
+							    amount: amount
+							});
 
-//extract your whole DB
-// firebase.database().ref('/table/').once('value').then(function(snapshot) {
-//   var tableT = snapshot.val();
-//   alert(tableT.dashboard);
-// });
+						var spentOn;
+						var spent;
+						var index=0;	
+						myExpenseRef.orderByKey().on("value", function(snap){
+        		snap.forEach(function(childSnap){
+        					var expenses= childSnap.val();
+        					 spentOn = expenses.spentOn;
+        					 spent = expenses.amount;
+        					 index++;
+	        	
 // looop through the data base and display the content inside it
-				for(i=0; i<3; i++){
-					$('.incom').append("<tr>"+
-                                    "<td>1</td>"+
-                                    "<td>Bank</td>"+
-                                    "<td class='text-center'>500</td>"+
-                                "</tr>");
-				};
-			    
-			});
-	 });
-
-$('.expenses').click(function(){
-	$('#expSub').click(function(){
-				var name = $('#expName').val();
-				var amount= $('#expNum').val();
-				var newPostRef= firebase.database().ref('table/expenses/').push();
-					newPostRef.set({
-					    name: name,
-					    amount: amount
+							$('.expensesT').append("<tr>"+
+		                                    "<td>"+index+"</td>"+
+		                                    "<td>"+spentOn+"</td>"+
+		                                    "<td class='text-center'>"+spent+"</td>"+
+		                                     "</tr>");
+					   	
+					   	});
+	        	}); 
 					});
-
-
-
-//extract your whole DB
-// firebase.database().ref('/table/').once('value').then(function(snapshot) {
-//   var tableT = snapshot.val();
-//   alert(tableT.dashboard);
-// });
-// looop through the data base and display the content inside it
-				for(i=0; i<3; i++){
-					$('.expensesT').append("<tr>"+
-                                    "<td>1</td>"+
-                                    "<td>Gas</td>"+
-                                    "<td class='text-center'>50</td>"+
-                                     "</tr>");
-				};
-			    
 			});
-	});
 
-})
-
+});
 // this adds up all the numbers and returns the sumation
 function addition(data){
 	var sum =0;

@@ -52,15 +52,8 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">Income and Accounts Balance </h3>
                         </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    Expected Income:
-                                </div>
-                                <div class="col-md-6 text-right">
-                                    1000.00
-                                </div>
-                            </div>
+                        <div class="panel-body" id="expectedIncome">
+                          <!--  -->
                         </div>
                         <div class="panel-footer">
                             <div class="row">
@@ -68,7 +61,7 @@
                                     <h4>Total:</h4>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <h4>600.00</h4>
+                                    <h4></h4>
                                 </div>
                             </div>
                         </div>
@@ -81,23 +74,16 @@
                             <h3 class="panel-title">Total Expenses</h3>
                         </div>
                         <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-6 right">
-                                    Total Expenses:
-                                </div>
-                                <div class="col-md-6 text-right">
-                                    100.00
-                                </div>
+                            <div class="row" id= "totalExp">
+                                <!--  -->
                             </div>
                         </div>
                         <div class="panel-footer">
-                            <div class="row">
+                            <div class="row" id="balance">
                                 <div class="col-md-6 right">
                                     <h4>Balance left:</h4>
                                 </div>
-                                <div class="col-md-6 text-right">
-                                    <h4>100.00</h4>
-                                </div>
+                                  <!--  -->
                             </div>
                         </div>
                     </div>
@@ -116,7 +102,7 @@
                             <thead>
                                 <tr>
                                     <th>Item</th>
-                                    <th width="120" class="text-center">Option</th>
+                                    <th width="120" class="text-center">Priority</th>
                                     <th width="120" class="text-center">Budgeted For</th>
                                     <th width="120" class="text-center">Actual</th>
                                     <th width="120" class="text-center">Spent</th>
@@ -124,25 +110,20 @@
                                 </tr>
                             </thead>
                             <tbody class="allocation">
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        <select name="category" class="form-control">
-                                            <option value="High">High</option>
-                                            <option value="Medium">Medium</option>
-                                            <option value="Low">Low</option>
-                                        </select></td>
-                                    <td class="text-center">Gas</td>
-                                    <td class="text-center">100</td>
-                                    <td class="text-center">50</td>
-                                    <!-- <td><a class="btn btn-sm"><span class="glyphicon glyphicon-remove" id="allRem" aria-hidden="true"></span></a></td> -->
-                                </tr>
+                        <!--  -->
                             </tbody>
                         </table>
 
                         <hr>
                         <h4>You can add more items below</h4>
                         <div class="row">
+                            <div class="col-lg-3">
+                                <select name="category" class="form-control" id="mySelect">
+                                    <option value="High">High</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Low">Low</option>
+                                </select>
+                            </div>
                             <div class="col-lg-3">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="allName" placeholder="Add item">
@@ -164,6 +145,7 @@
                 </div>
             </div>   
         </div>
+        
 <!-- Income -->
         <div id="income" class="tab-pane fade">
             <div class="panel panel-info">
@@ -282,7 +264,7 @@
     <!-- JavaScripts -->
     <script src="js/jquery-3.1.1.js"></script>
     <script src="bootstrap/js/bootstrap.js"></script>
-    <script src="js/findem.js"></script>
+    <script src="js/fireinit.js"></script>
     <script scr="js/app.js"></script>
 </body>
 </html>
