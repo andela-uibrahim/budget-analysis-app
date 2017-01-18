@@ -12,32 +12,12 @@
 })();
 
  // Get a reference to the database service
-  var database = firebase.database();
+var database = firebase.database();
 
-
-
-//this is use to create and object in a table and set its value
-  function dashboard(totIncomes, totExpenses) {
-  firebase.database().ref('table/income/').set({
-    source: totIncomes,
-    amount: totExpenses
-  });
-};
-dashboard("usman",500);
-
-
-//this is use to instaciate a list on similar object in the same table
-// for (i=0; i<3; i++){
-// var newPostRef= firebase.database().ref('table/dashboard/').push();
-// newPostRef.set({
-//     totIncomes: 60,
-//     totalExpenses: 80
-// });
-// };
 
 
 var myDashRef = firebase.database().ref('table/dashboard/');
-var myIncome =firebase.database().ref('table/income/');
+var myIncomeRef =firebase.database().ref('table/income/');
 var myExpenseRef= firebase.database().ref('table/expenses/');
 var myBudgetRef =firebase.database().ref('table/budget/');
 
@@ -45,15 +25,27 @@ var myBudgetRef =firebase.database().ref('table/budget/');
 
 $(document).ready(function(){
 
+
+// //this is use to create and object in a table and set its value
+//   function dashboard(totIncomes, totExpenses) {
+//   firebase.database().ref('table/income/').set({
+//     source: totIncomes,
+//     amount: totExpenses
+//   });
+// };
+// dashboard("usman",500);
+
 	var totalInc=0;
 	var totalExp=0;
+
 	myDashRef.orderByKey().on("value", function(snap){
         snap.forEach(function(childSnap){
             
           var  arrVal = childSnap.val();
             totalInc+= arrVal.totIncomes;
             totalExp+=arrVal.totalExpenses;
-        });
+
+            });
       
       	$("#expectedIncome").append("<div class='row'>"+
 	                                  	"<div class='col-md-6'>"+
@@ -77,11 +69,8 @@ $(document).ready(function(){
                                     "</h4>"+
                                 "</div>");
 
-      });
-			
-
-
-
+      	
+			});
 
 	// myDashRef.once('value').then(function(snapshot) {
 	
@@ -144,28 +133,29 @@ $(document).ready(function(){
 				$('#incSub').click(function(){
 						var name = $('#incName').val();
 						var amount= $('#incNum').val();
-						var newPostRef= firebase.database().ref('table/income/').push();
+						var newPostRef= myIncomeRef.push();
 							newPostRef.set({
 							    source: name,
 							    amont: amount
 							});
+						var index=0;
+						myIncomeRef.orderByChild('allocation').on("value", function(snap){
+			        snap.forEach(function(childSnap){
 
+			        	var income = childSnap.val();
+			        	var source= income.source;
+			        	var amount = income.amont;
+			        	console.log(typeof amount);
+			        	index++;
+								$('.incom').append("<tr>"+
+			                                    "<td>"+index+"</td>"+
+			                                    "<td>"+source+"</td>"+
+			                                    "<td class='text-center'>"+amount+"</td>"+
+			                                    "</tr>");
+							});
+							});   
+				}); 
 
-		//extract your whole DB
-		// firebase.database().ref('/table/').once('value').then(function(snapshot) {
-		//   var tableT = snapshot.val();
-		//   alert(tableT.dashboard);
-		// });
-		// looop through the data base and display the content inside it
-						for(i=0; i<3; i++){
-							$('.incom').append("<tr>"+
-		                                    "<td>1</td>"+
-		                                    "<td>Bank</td>"+
-		                                    "<td class='text-center'>500</td>"+
-		                                "</tr>");
-						};
-					    
-					});
 			 });
 
 		$('.expenses').click(function(){
@@ -175,14 +165,18 @@ $(document).ready(function(){
 						var newPostRef= myExpenseRef.push();
 							newPostRef.set({
 							    spentOn: spentOn,
-							    amount: amount
+							    amount: parseInt(amount)
 							});
 
 						var spentOn;
 						var spent;
 						var index=0;	
-						myExpenseRef.orderByKey().on("value", function(snap){
-        		snap.forEach(function(childSnap){
+						myExpenseRef.orderByChild('amount').on("value", function(snap){
+						var snapReverse = []
+						snap.forEach(function(snapChild) {
+							snapReverse.unshift(snapChild)
+						})
+        		snapReverse.forEach(function(childSnap){
         					var expenses= childSnap.val();
         					 spentOn = expenses.spentOn;
         					 spent = expenses.amount;
@@ -201,14 +195,36 @@ $(document).ready(function(){
 			});
 
 });
+
+
+
 // this adds up all the numbers and returns the sumation
-function addition(data){
-	var sum =0;
-	for(i=0; i<data.length; i++){
-		sum+=data[i][name];
-	}
-	return sum
-};
+function sumIncome(){
+		var total= 0;
+		myBudgetRef.orderByKey().on("value", function(snap){
+        		snap.forEach(function(childSnap){
+            var  budget = childSnap.val();
+            var allocation = budget.allocation;
+            total+=allocation;
+
+          });
+        });
+		return total;
+}
+
+function sumExpense(){
+var total= 0;
+		myExpenseRef.orderByKey().on("value", function(snap){
+        		snap.forEach(function(childSnap){
+            var  expenses = childSnap.val();
+            var expense = expenses.amont;
+
+            total+= expense;
+
+          });
+        });
+		return total;
+}
 
 function balance(first, second) {
 	return (first-second);
