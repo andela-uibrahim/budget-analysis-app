@@ -14,7 +14,6 @@
 			}else if(amount<=0){
 				return null;
 			}
-			//else{
 						myIncomeRef.orderByChild("source").equalTo(name).limitToFirst(1).once("value", function(snapshot) {
 				    var data = snapshot.val();
 				    if (data){
@@ -39,7 +38,6 @@
 						})
 						
 						viewIncome();
-					//}
 				})
 		})
 };

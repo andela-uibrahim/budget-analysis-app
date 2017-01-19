@@ -4,6 +4,11 @@
  *adds new expenses to the database;
  */
 
+ var budgetAllocationHandler;
+
+budgetAllocationHandler = myExpenseRef.on('child_changed', function() {
+	viewAllocation();
+})
 function newExpenses(){
 	return(function(){
 		$('#expSub').click(function(){
@@ -39,6 +44,32 @@ function newExpenses(){
 		});
 	};
 
+
+$("#decending").click(viewExpenses());
+$("#asending").click(viewAExpenses());
+
+function viewAExpenses(){
+	return(function viewExpenses(){
+	var spentOn;
+	var spent;	
+	myExpenseRef.orderByChild('amount').on("value", function(snap){
+	var snapReverse = []
+	snap.forEach(function(snapChild) {
+		snapReverse.push(snapChild)
+	});
+	var index=0;
+	$('.expensesT').html("");
+	snapReverse.forEach(function(childSnap){
+		var expenses= childSnap.val();
+		spentOn = expenses.spentOn;
+		spent = expenses.amount;
+		index++;
+		appendToExpenses(index,spentOn,spent);
+	 	});
+  }); 
+}()
+);
+}
 
 /**
  * viewExpenses

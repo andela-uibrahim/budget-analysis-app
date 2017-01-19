@@ -3,6 +3,10 @@
  * @ function
  *returns function to display allocations
  */
+
+var budgetAllocationHandler;
+
+
 function newAllocation(){
 	return (function(){
 		$('#allSub').click(function(){
