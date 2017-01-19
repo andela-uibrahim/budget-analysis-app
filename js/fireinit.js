@@ -11,6 +11,7 @@
   });
 })();
 
+
  // Get a reference to the database service
 var database = firebase.database();
 
@@ -24,59 +25,79 @@ var myBudgetRef =database.ref('table/budget/');
 
 
 $(document).ready(function(){
-
-
+	/**
+   * viewDashboard();
+   * loads the dashboard page when the app is accessed
+   */
 	viewDashboard();
-	$('.budget').click(allocationPage(),newAllocation());
+
+	/**
+   * allocationPage()
+   * displays the allocation page when the budget menu is clicked
+   *
+   *newAllocation()
+   *adds new allocation to the allocation page onclick of submit
+   */
+	$('.budget').click(viewAllocation(),newAllocation());
 	$('.income').click(viewIncome(),newIncome());
 	$('.expenses').click(viewExpenses(),newExpenses());
 
 });
 
 
+
+/**
+ * adds new allocation to the allocation page;
+ * @ function
+ *returns function to display allocations
+ */
 function newAllocation(){
 	return (function(){
 		$('#allSub').click(function(){
 		var purpose = $('#allName').val();
 		var amount= $('#allNum').val();
 		var selected= $('#mySelect').val();
-		myBudgetRef.orderByChild("purpose").equalTo(purpose).limitToFirst(1).once("value", function(snapshot) {
-    var data = snapshot.val();
-    if (data){
+    myBudgetRef.orderByChild("purpose").equalTo(purpose).limitToFirst(1).once("value", function(snapshot) {
+	    var data = snapshot.val();
+	    if (data){
     		var dataKey = (Object.keys(data)[0])
           myBudgetRef.child(dataKey).update({
-              'allocation': parseInt(amount),
-              'priority': selected
-          }, function(err) {
-              if (err) {
-
-                  console.log(err.toString())
-              }
-          });
-    } else {
-    	 var newPostRef= myBudgetRef.push();
+            'allocation': parseInt(amount),
+            'purpose': purpose
+          },function(err) {
+	            if (err) {
+								console.log(err.toString())
+								}
+					});			
+			}else{ 
+				var newPostRef= myBudgetRef.push();
 				newPostRef.set({
-		    allocation: amount,
-		    purpose: purpose,
-		    priority:selected
-			});
-    }
-});
-		
-		allocationPage();
+				  purpose: purpose,
+				  allocation: parseInt(amount),
+				  priority:selected
+				});
+			}
+		})
+		//calls function allocation page to load the new page
+		viewAllocation();
 		});
 	})};
 
 
-function allocationPage(){
+/**
+ * adds viewAlocation to the allocation page;
+ * @ function
+ *function to display allocations
+ */
+function viewAllocation(){
 	var allocation=0;
 	var purpose =0;
-	var priority=0;
-	var index=0;
+	var priority=0;	
 
-// looop through the data base and display the content inside it
+// looop through the database and display the content inside it
 	myBudgetRef.orderByKey().on("value", function(snap){
-		 $('.allocation').html("");
+		$('.allocation').html("");
+		var index=0;
 		snap.forEach(function(childSnap){
     var  budget = childSnap.val();
     index++;
@@ -97,7 +118,7 @@ function allocationPage(){
 
   	var status= checkStatus(allocation,spent);
 
-    $('.allocation').append("<tr class='"+status+"'>"+
+    $('.allocation').append("<tr id='"+status+"'>"+
 			"<td>"+index+"</td>"+
 			"<td class='text-center'>"+priority+"</td>"+	
 			"<td class='text-center'>"+purpose+"</td>"+
@@ -107,29 +128,56 @@ function allocationPage(){
 		});
 	});
 };
-						
 
+						
+/**
+ * newIncome
+ * @ function
+ *add new income to the database;
+ */
 function newIncome(){
 	return(function(){
 		$('#incSub').click(function(){
 			var name = $('#incName').val();
 			var amount= $('#incNum').val();
-			var newPostRef= myIncomeRef.push();
-				newPostRef.set({
-				    source: name,
-				    amont: amount
-				});
-			
-			viewIncome();
+			myIncomeRef.orderByChild("source").equalTo(name).limitToFirst(1).once("value", function(snapshot) {
+		    var data = snapshot.val();
+		    if (data){
+		    		var dataKey = (Object.keys(data)[0])
+		          myIncomeRef.child(dataKey).update({
+		            'amont': parseInt(amount),
+		            'source': name
+		          }, function(err) {
+	              if (err) {
+
+	                  console.log(err.toString())
+	                }
+	               });
+				}else{ 
+
+						var newPostRef= myIncomeRef.push();
+						newPostRef.set({
+						  source: name,
+						  amont: parseInt(amount)
+						});
+					}
+				})
+				
+				viewIncome();
 		})
 	})
 };
 
 
+/**
+ * viewIncome
+ * @ function
+ *shows incomes and their sources in the database;
+ */
 function viewIncome(){
-	var index=0;
 		myIncomeRef.orderByChild('allocation').on("value", function(snap){
 			$('.incom').html("");
+			var index=0;
       snap.forEach(function(childSnap){
 
       	var income = childSnap.val();
@@ -145,12 +193,19 @@ function viewIncome(){
 		});
 }
 
+
+/**
+ * viewDashboard
+ * @ function
+ *displays total income, total expenses and the current balance also shows status;
+ */
+
 function viewDashboard(){
 		return (function(){
 
       	var totalInc= getTotalInc();
-      	console.log(totalInc);
-				var totalExp= getTotalExp();
+      	var totalExp = getTotalExp();
+      	console.log(totalExp)
 				var balance= getBalance(totalInc,totalExp);
 				var status = checkStatus(totalInc,getTotalExp);
 
@@ -182,49 +237,84 @@ function viewDashboard(){
 
 
 
+/**
+ * newExpenses
+ * @ function
+ *adds new expenses to the database;
+ */
+
 function newExpenses(){
 	return(function(){
 			$('#expSub').click(function(){
-						var spentOn = $('#expName').val();
-						var amount= $('#expNum').val();
-						var newPostRef= myExpenseRef.push();
+				var spentOn = $('#expName').val();
+				var amount= $('#expNum').val();
+				myExpenseRef.orderByChild("spentOn").equalTo(spentOn).limitToFirst(1).once("value", function(snapshot) {
+		    var data = snapshot.val();
+		    if (data){
+		    		var dataKey = (Object.keys(data)[0])
+		         myExpenseRef.child(dataKey).update({
+		            'amount': parseInt(amount),
+		            'spentOn': spentOn
+		          },function(err) {
+		              if (err) {
+
+		                  console.log(err.toString())
+		              	}
+		          		});
+	    	}else{ 
+
+							var newPostRef= myExpenseRef.push();
 							newPostRef.set({
 							    spentOn: spentOn,
 							    amount: parseInt(amount)
 							});
-
+						}
 					});
-	});};
+					viewExpenses();
+				});
+			});
+		};
 
 
 
+/**
+ * viewExpenses
+ * @ function
+ *shows all expenses in the database;
+ */
 function viewExpenses(){
 	var spentOn;
-		var spent;
-		var index=0;	
-		myExpenseRef.orderByChild('amount').on("value", function(snap){
-		var snapReverse = []
-		snap.forEach(function(snapChild) {
-			snapReverse.unshift(snapChild)
-		});
-		$('.expensesT').html("");
-		snapReverse.forEach(function(childSnap){
-			var expenses= childSnap.val();
-			 spentOn = expenses.spentOn;
-			 spent = expenses.amount;
-			 index++;
-  	
+	var spent;	
+	myExpenseRef.orderByChild('amount').on("value", function(snap){
+	var snapReverse = []
+	snap.forEach(function(snapChild) {
+		snapReverse.unshift(snapChild)
+	});
+	var index=0;
+	$('.expensesT').html("");
+	snapReverse.forEach(function(childSnap){
+		var expenses= childSnap.val();
+		 spentOn = expenses.spentOn;
+		 spent = expenses.amount;
+		 index++;
+	
 // looop through the data base and display the content inside it
-			$('.expensesT').append("<tr>"+
-        "<td>"+index+"</td>"+
-        "<td>"+spentOn+"</td>"+
-        "<td class='text-center'>"+spent+"</td>"+
-         "</tr>");
-	   	
-	   	});
+		$('.expensesT').append("<tr>"+
+      "<td>"+index+"</td>"+
+      "<td>"+spentOn+"</td>"+
+      "<td class='text-center'>"+spent+"</td>"+
+       "</tr>");
+   	
+   	});
   	}); 
-}
+	}
 
+
+/**
+ * getTotalInc
+ * @ function
+ *show the total income in the database;
+ */
 function getTotalInc(){
 		var totalInc=0;
 		myIncomeRef.orderByChild('allocation').on("value", function(snap){
@@ -232,39 +322,56 @@ function getTotalInc(){
 
       	var income = childSnap.val();
       	totalInc+= income.amont;
-			});
-			return totalInc;
+			})
 		});
-		
+	return totalInc;
+
 	}
 
+
+/**
+ * getTotalExp
+ * @ function
+ *show the total expense in the database;
+ */
 function getTotalExp(){
 	var totalExp=0;
-	myExpenseRef.orderByChild('amount').on("value", function(snap){
+	return new Promise((resolve, reject) => {
+			return myExpenseRef.orderByChild('amount').on("value", function(snap){
       snap.forEach(function(childSnap){
 
       	var expenses = childSnap.val();
       	totalExp+= expenses.amount;
-			});
-
-			return totalExp;
-		});
-	
+			})
+      resolve(totalExp)
+			
+		})
+	}).then(function (val) {
+		console.log(val, 'val')
+	})
 }
 
 
+/**
+ * getBalance
+ * @ function
+ *show the difference between two numbers;
+ */
 function getBalance(first, second) {
 	return (first-second);
 };
 
 
-
-
+/**
+ * checkStatus
+ * @ function
+ *track the status of the budget and expenses;
+ */
 function checkStatus (budget,expenses){
 	var balance= (budget-expenses);
 	if(balance<=(budget/3)){
 		return "red";
-	}else if (balance<(budget/2)) {
+	}else if ((balance<=(budget/2)) && (balance>=(budget/3))) {
 		return "yellow";
 	}
 }
