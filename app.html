@@ -98,7 +98,17 @@
                 </div>
                 <div class="panel-body">
                     <div class="col-md-10 col-md-offset-1">
-                        <table class="table table-striped">
+                        <div class="row">
+                            <div class="col-md-3 col-md-offset-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control search-input" data-table="#allocation-table" placeholder="Amount">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- /.row -->
+                        <table class="table table-striped" id="allocation-table">
                             <thead>
                                 <tr>
                                     <th>Item</th>
@@ -271,6 +281,7 @@
     <script type="text/javascript" src="js/income.js"></script>
     <script type="text/javascript" src="js/expenses.js"></script>
     <script type="text/javascript" src="js/document.js"></script>
+    <script type="text/javascript" src="js/table-filter.js"></script>
     
 </body>
 </html>
