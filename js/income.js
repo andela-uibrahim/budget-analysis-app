@@ -9,32 +9,39 @@
 		$('#incSub').click(function(){
 			var name = $('#incName').val();
 			var amount= $('#incNum').val();
-			myIncomeRef.orderByChild("source").equalTo(name).limitToFirst(1).once("value", function(snapshot) {
-		    var data = snapshot.val();
-		    if (data){
-		    		var dataKey = (Object.keys(data)[0])
-		          myIncomeRef.child(dataKey).update({
-		            'amont': parseInt(amount),
-		            'source': name
-		          }, function(err) {
-	              if (err) {
+			if(!name || (Number(name)) ){
+				return null;
+			}else if(amount<=0){
+				return null;
+			}
+			//else{
+						myIncomeRef.orderByChild("source").equalTo(name).limitToFirst(1).once("value", function(snapshot) {
+				    var data = snapshot.val();
+				    if (data){
+					    		var dataKey = (Object.keys(data)[0])
+					          	myIncomeRef.child(dataKey).update({
+					            'amont': parseInt(amount),
+					            'source': name
+					          }, function(err) {
+				              if (err) {
 
-	                  console.log(err.toString())
-	                }
-	               });
-				}else{ 
+				                  console.log(err.toString())
+				                }
+				               });
+						}else{ 
 
-						var newPostRef= myIncomeRef.push();
-						newPostRef.set({
-						  source: name,
-						  amont: parseInt(amount)
-						});
-					}
+								var newPostRef= myIncomeRef.push();
+								newPostRef.set({
+								  source: name,
+								  amont: parseInt(amount)
+								});
+							}
+						})
+						
+						viewIncome();
+					//}
 				})
-				
-				viewIncome();
 		})
-	})
 };
 
 
@@ -52,8 +59,7 @@ function viewIncome(){
       	var source= income.source;
       	var amount = income.amont;
       	index++;
-		
-		appendIncome (index,source,amount);	
+			appendIncome (index,source,amount);	
 		});
 	});
 }

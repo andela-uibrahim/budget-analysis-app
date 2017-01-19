@@ -9,6 +9,11 @@ function newExpenses(){
 		$('#expSub').click(function(){
 			var spentOn = $('#expName').val();
 			var amount= $('#expNum').val();
+			if(!spentOn || (Number(spentOn))){
+				return null;
+			}else if(amount<=0){
+				return null
+			}
 			myExpenseRef.orderByChild("spentOn").equalTo(spentOn).limitToFirst(1).once("value", function(snapshot) {
 	    var data = snapshot.val();
 	    if (data){

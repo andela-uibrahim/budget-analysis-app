@@ -9,30 +9,37 @@ function newAllocation(){
 		var purpose = $('#allName').val();
 		var amount= $('#allNum').val();
 		var selected= $('#mySelect').val();
-    myBudgetRef.orderByChild("purpose").equalTo(purpose).limitToFirst(1).once("value", function(snapshot) {
-	    var data = snapshot.val();
-	    if (data){
-    		var dataKey = (Object.keys(data)[0])
-          myBudgetRef.child(dataKey).update({
-            'allocation': parseInt(amount),
-            'purpose': purpose
-          },function(err) {
-	            if (err) {
-								console.log(err.toString())
-								}
-					});			
-			}else{ 
-				var newPostRef= myBudgetRef.push();
-				newPostRef.set({
-				  purpose: purpose,
-				  allocation: parseInt(amount),
-				  priority:selected
-				});
-			}
-		})
-		//calls function allocation page to load the new page
-		viewAllocation();
-		});
+		if (!purpose || typeof(purpose)!=="string"){
+			return null;
+		}
+		else if(amount<=0){
+			return null;
+		}else{
+		    myBudgetRef.orderByChild("purpose").equalTo(purpose).limitToFirst(1).once("value", function(snapshot) {
+			    var data = snapshot.val();
+			    if (data){
+		    		var dataKey = (Object.keys(data)[0])
+		          myBudgetRef.child(dataKey).update({
+		            'allocation': parseInt(amount),
+		            'purpose': purpose
+		          },function(err) {
+			            if (err) {
+										console.log(err.toString())
+										}
+							});			
+					}else{ 
+						var newPostRef= myBudgetRef.push();
+						newPostRef.set({
+						  purpose: purpose,
+						  allocation: parseInt(amount),
+						  priority:parseInt(selected)
+						});
+					}
+				})
+				//calls function allocation page to load the new page
+				viewAllocation();
+				}
+			})
 	})};
 
 
@@ -47,10 +54,14 @@ function viewAllocation(){
 	var priority=0;	
 
 // looop through the database and display the content inside it
-	myBudgetRef.orderByKey().on("value", function(snap){
+	myBudgetRef.orderByChild("priority").on("value", function(snap){
+		var snapSort = [];
+		snap.forEach(function(snapChild){
+		snapSort.push(snapChild)
+		});
 		$('.allocation').html("");
 		var index=0;
-		snap.forEach(function(childSnap){
+		snapSort.forEach(function(childSnap){
     var  budget = childSnap.val();
     index++;
     allocation = budget.allocation;
@@ -67,9 +78,18 @@ function viewAllocation(){
 				}
   		});
   	});
-
+    var displayPrio;
+    if (priority===1){
+    	displayPrio="High";
+    }
+    else if(priority===2){
+    	displayPrio="Medium";
+    }
+    else{
+    	displayPrio="Low"
+    }
   	var status= checkStatus(allocation,spent);
-			appendAllocation(status,index,priority,purpose,allocation,spent);
+			appendAllocation(status,index,displayPrio,purpose,allocation,spent);
 		});
 	});
 };
@@ -84,3 +104,4 @@ function appendAllocation(status,index,priority,purpose,allocation,spent){
 			"<td class='text-center'>"+spent+"</td>"+
 			"</tr>"))
 };
+
