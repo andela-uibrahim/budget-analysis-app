@@ -1,0 +1,45 @@
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+.nav{
+	margin-left: 80px;
+}
+
+.panel-body{
+	font-size: 16px;
+}
+
+.panel-body .row{
+	margin-bottom: 10px;
+}
+
+.panel h3{
+	margin-top: 0px;
+    margin-bottom: 0px;
+}
+#red{
+	background-color: red;
+}
+#yellow{
+	background-color: yellow;
+}
+.brand-name{
+	color: black;
+}
+.panel.login{
+	margin-top: 150px;
+}
+
+#desending{
+	text-decoration: none;
+}
+#asending{
+	text-decoration: none;
+	margin-left: -15px;
+	margin-top: -15px
+}
